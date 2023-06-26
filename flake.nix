@@ -15,13 +15,20 @@
   };
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    #nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    #BUG: https://github.com/NixOS/nixpkgs/issues/235179
+    #BUG: https://github.com/NixOS/nixpkgs/issues/235526
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:nixos/nixos-hardware";
+
+    #TODO: https://github.com/NixOS/nixos-hardware/pull/612
+    # tc_linux, HardenOS kernel configs etc. are not part of nixos/nixos-hardware
+    # need to have all these in a forked repository
+    nixos-hardware.url = "github:tiiuae/nixos-hardware/tii-riscv";
     microvm = {
       url = "github:astro/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -45,6 +52,7 @@
     systems = with flake-utils.lib.system; [
       x86_64-linux
       aarch64-linux
+      riscv64-linux
     ];
     lib = nixpkgs.lib.extend (final: _prev: {
       ghaf = import ./lib {
