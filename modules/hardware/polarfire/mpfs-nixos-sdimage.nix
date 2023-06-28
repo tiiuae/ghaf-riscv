@@ -12,7 +12,7 @@
   sdImage =  {
     compressImage = false;
     populateFirmwareCommands = ''
-      cp ${pkgs.uboot-polarfire}/payload.bin firmware/
+      cp ${pkgs.uboot-tc-saluki}/payload.bin firmware/
     '';
 
     populateRootCommands = ''
@@ -43,7 +43,7 @@
         start=$((offset + ubootsize)), size=$rootsize, type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, uuid=17E58027-1F0E-4146-8F88-AB26C740BC6D, name=\"kernel\", attrs=\"LegacyBIOSBootable\" " > "$out/partition.txt"
 
      sfdisk $sdimage < "$out/partition.txt"
-     dd conv=notrunc if=${pkgs.uboot-polarfire}/payload.bin of=$sdimage seek=$offset
+     dd conv=notrunc if=${pkgs.uboot-tc-saluki}/payload.bin of=$sdimage seek=$offset
      dd conv=notrunc if=$img of=$sdimage seek=$((offset + ubootsize)) skip=$rootstart count=$rootsize
      sfdisk --list $sdimage
    '';

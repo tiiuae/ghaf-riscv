@@ -9,17 +9,17 @@
   nixpkgs,
   nixos-hardware,
 }: let
-  name = "mpfs-icicle-kit";
+  name = "tc-saluki";
   system = "riscv64-linux";
-
-  mpfs-icicle-kit = variant: extraModules: let
+  tc-saluki = variant: extraModules: let
     hostConfiguration = lib.nixosSystem {
       inherit system;
       specialArgs = {inherit lib;};
       modules =
         [
-          nixos-hardware.nixosModules.polarfire-hardenedos
+          nixos-hardware.nixosModules.tii-tc-saluki
           ../modules/hardware/polarfire/mpfs-nixos-sdimage.nix
+          ../modules/hardware/polarfire/${variant}-modules.nix
           (import ../modules/embedded-host {
             inherit self;
           })
@@ -59,10 +59,10 @@
     name = "${name}-${variant}";
     package = hostConfiguration.config.system.build.sdImage;
   };
-  debugModules = [];
+
   targets = [
-    (mpfs-icicle-kit "debug" debugModules)
-    (mpfs-icicle-kit "release" [])
+    (tc-saluki "debug" [])
+    (tc-saluki "release" [])
   ];
 in {
   nixosConfigurations =
